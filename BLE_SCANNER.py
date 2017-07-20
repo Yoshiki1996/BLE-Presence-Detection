@@ -1,6 +1,12 @@
 '''
 Python API using raspbian bluetoothctl for fetching the BLE devices
-available with its associated real-time capture
+available with its associated real-time capture.
+
+This code should not be plagarized nor used for credential/academic purposes
+unless stated otherwise by the owner. Modification and usage is accepted
+upon approval.
+
+For more details contact: yoshiki.shoji@mail.utoronto.ca
 '''
 
 # Operating systems (In my case):
@@ -57,12 +63,25 @@ class Bluetoothctl:
         'Device B8:8A:60:F3:38:AF KST-L-DBERRY', "Device 98:4F:EE:0D:16:6E Baptiste's BLE",
         'Device 48:DB:50:8A:AB:A1 Nexus 6P', '\x1b[0;94m[']'''
 
-        output = self.send_command(command)[2:-1]
+        '''
+        [']\x1b[0m# Failed to start discovery: org.bluez.Error.InProgress', "[\x1b[0;92mNEW\x1b[0m] Device A4:31:35:BC:4A:F3 Yoshiki's Ipod",
+        'Device E1:53:45:CC:9E:1C Charge 2', "Device A4:31:35:BC:4A:F3 Yoshiki's Ipod", '\x1b[0;94m[']
+        '''
 
-        #Obtain the Devices only
-        output_temp = [devices for devices in output if devices.find('[\x1b[0;93mCHG\x1b[0m]') == -1]
-        list_of_devices = [devices.replace('Device ','') for devices in output_temp]
+        '''
+        init bluetooth...
+        ['E1:53:45:CC:9E:1C']
+        all devices removed from bluetoothctl
+        {'[\x1b[0;92mNEW\x1b[0m]': 'E1:53:45:CC:9E:1C Charge 2'}
+        '''
+
+        output = self.send_command(command)[1:-1]
         
+        #Obtain the Devices only
+        output_temp = [devices for devices in output if devices.find('\x1b[0;9') == -1]
+        
+        list_of_devices = [devices.replace('Device ','') for devices in output_temp]
+    
         return list_of_devices
 
     def get_device_info_dict(self):
@@ -81,23 +100,42 @@ class Bluetoothctl:
             dict_devices.update(dict_device)
             
         return dict_devices
+            
+    def remove_devices_KV(self,dict_devices):
+        '''remove all the existing devices in the file called, 'devices'
+           in bluetoothctl:
 
-    def remove_devices(self,dict_devices):
-        '''remove all the existing {key:value} pairs in the
-            dictionary produced by get_device_info_dict
+           This is when {key:value} = {mac:name}
         '''
-        empty_dict = dict_devices.clear()
-        
-        return empty_dict
+        mac_list = dict_devices.keys()
+        print(mac_list)
+        for mac in mac_list:
+            self.child.send('remove '+mac+ '\n')
 
+        print('all devices removed from bluetoothctl')
+        return 
+
+    def remove_devices_VK(self,dict_devices):
+        '''remove all the existing devices in the file called, 'devices'
+           in bluetoothctl:
+
+           This is when {key:value} = {name:mac}
+        '''
+        mac_list = dict_devices.values()
+        
+        for mac in mac_list:
+            self.child.send('remove '+mac+ '\n')
+
+        return
+    
 if __name__ == '__main__':
     
-    bl = Bluetoothctl()
+    print('init bluetooth...')
+    bl = Bluetoothctl() 
+
     for i in range(0,2):
-        if i == 1:
-            print('init bluetooth...')
         bl.start_scan(scan_time = 5)  
 
     devices = bl.get_device_info_dict()
-    print(devices)
-    #print(bl.remove_devices(dict_devices=devices))
+    bl.remove_devices_KV(devices)
+    
