@@ -1,6 +1,7 @@
 # BLE SCANNER AND DATA GENERATOR USING RASPBERRY PI
 
 Code is run on Python V2.x and Raspberry Pi Bluetoothctl environment
+To run any of the code, type: "sudo python CODENAME.py" in terminal
 
 1. BLE_SCANNER: Scans all available BLE devices within the proximity. Python fetches
    Raspberry Pi Bluetoothctl environment.
@@ -10,4 +11,6 @@ Code is run on Python V2.x and Raspberry Pi Bluetoothctl environment
 3. BLE_DATA: Compiles all the BLE code above into one (calling this file will execute all functions above automatically).
    Stores the present date, time and mac and presence string upon scan. It dynamically retrieves the BLE device every call,
    hence detects whether a new BLE device is present, or if a pre-existing device disappears.
+   
+   
    
