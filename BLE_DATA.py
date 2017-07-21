@@ -79,7 +79,7 @@ class DATA:
             return
         else:
             disp_dev = [dev for dev in devices_prior.keys() if dev not in devices_updated.keys()]
-            #print('all devices in' disp_dev 'disappeared')
+            print('Some devices have disappeared - go to table for more info')
 
             for dev in disp_dev:
                 insertStatement = ("INSERT INTO "+dev+"(DATE,TIME,MAC,AVAILABILITY)"
