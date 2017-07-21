@@ -112,7 +112,6 @@ class Bluetoothctl:
         for mac in mac_list:
             self.child.send('remove '+mac+ '\n')
 
-        print('all devices removed from bluetoothctl')
         return 
 
     def remove_devices_VK(self,dict_devices):
