@@ -158,7 +158,7 @@ class DATA:
                         bl.remove_devices_VK(devices_mydict_updated)
 
                         # Store all 'newly' detected devices
-                        # self.newly_detected(devices_mydict,devices_mydict_updated)
+                        self.newly_detected(devices_mydict,devices_mydict_updated)
 
                         # Check for disappeared devices: NON-DETECTED case
                         self.check_disappearance(devices_mydict,devices_mydict_updated)
