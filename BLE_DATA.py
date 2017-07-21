@@ -55,7 +55,7 @@ class DATA:
 
         # Uncommon devices between the two dicts
         new_devices = list(set(devices_updated.keys()) ^ set(available))
-        print(new_devices)
+        # print(new_devices)
         if new_devices == []:
             print('No new devices seen')
             
