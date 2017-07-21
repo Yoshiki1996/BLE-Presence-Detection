@@ -171,7 +171,9 @@ class DATA:
 
                 totalscan_time1 -= 1
             
-                    
+        except (KeyboardInterrupt,SystemExit):
+            print('Scanning Completed. Goodbye!')
+            
         except Exception as e:
             '''Uncomment below to show what type of error was produced.'''
             print(type(e))
