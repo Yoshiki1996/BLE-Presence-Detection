@@ -108,7 +108,7 @@ class Bluetoothctl:
            This is when {key:value} = {mac:name}
         '''
         mac_list = dict_devices.keys()
-        print(mac_list)
+       
         for mac in mac_list:
             self.child.send('remove '+mac+ '\n')
 
