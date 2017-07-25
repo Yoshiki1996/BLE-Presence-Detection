@@ -57,10 +57,11 @@ class DATA:
         new_devices = list(set(devices_updated.keys()) ^ set(available))
         # print(new_devices)
         if new_devices == []:
-            print('No new devices seen')
-            
+            print('no new devices seen')
+            print('-----') 
         else:
             print('new devices seen - go to table for more info')
+            print('-----')  
             for new in new_devices:
                 insertStatement = ("INSERT INTO "+new+"(DATE,TIME,MAC,AVAILABILITY)"
                                    "VALUES(CURDATE(),CURTIME()," +"'"+ devices_updated[new] +"'"+", '"+DETECTED+"')")
@@ -79,8 +80,8 @@ class DATA:
             return
         else:
             disp_dev = [dev for dev in devices_prior.keys() if dev not in devices_updated.keys()]
-            print('Some devices have disappeared - go to table for more info')
-
+            print('some devices have disappeared - go to table for more info')
+            print('-----')
             for dev in disp_dev:
                 insertStatement = ("INSERT INTO "+dev+"(DATE,TIME,MAC,AVAILABILITY)"
                                     "VALUES(CURDATE(),CURTIME()," +"'"+ devices_prior[dev] +"'"+", '"+NON_DETECTED+"')")
@@ -94,19 +95,21 @@ class DATA:
             
             # Reset all pre-existing devices in bluetoothctl devices folder
             self.refresh()
-            
-            # Instantiate the table generator variables
-            # and initiate bluetoothctl
             table_gen = MYSQL_TABLE()
             
             while totalscan_time1 >= 0:
+                
+                # Instantiate the table generator variables
+                # and initiate bluetoothctl
+                
                 # Outer loop is used whenever the break statement is executed in the inner loop.
                 # Note the O(n^2) run time.
                 
                 init = True
                 bl = Bluetoothctl()
                 print('scanning again as no device was detected')
-                      
+                print('-----')
+                
                 while totalscan_time2 >= 0:
                     # Base case - always executed once
                     if init == True:
@@ -118,11 +121,13 @@ class DATA:
                         devices_dict = bl.get_device_info_dict()
                         if devices_dict == {}:
                             print('No devices seen. Scan again')
+                            print('-----')
                             break
                         
                         tablenames = table_gen.table_generator(devices_dict)[0]
                         devices_mydict = table_gen.table_generator(devices_dict)[1]
                         print(devices_mydict)
+                        print('-----')
                         
                         # Remove all devices from bluetoothctl - This is what will enable us to
                         # 'Dynamically' check the presence of the device
@@ -139,7 +144,7 @@ class DATA:
                     # Which consequently means tablenames is changing (ie. len difference)
 
                     else:
-                        print('init bluetooth...')
+                        print('init bluetooth.....')
             
                         bl = Bluetoothctl()
                         for i in range(0,2):
@@ -147,10 +152,6 @@ class DATA:
 
                         devices_dict_updated = bl.get_device_info_dict()
 
-                        if devices_dict_updated == {}:
-                            print('No devices seen. Scan again')
-                            break
-                        
                         tablenames_updated = table_gen.table_generator(devices_dict_updated)[0]
                         devices_mydict_updated = table_gen.table_generator(devices_dict_updated)[1]
                         print(devices_mydict_updated)
@@ -158,10 +159,17 @@ class DATA:
                         bl.remove_devices_VK(devices_mydict_updated)
 
                         # Store all 'newly' detected devices
-                        self.newly_detected(devices_mydict,devices_mydict_updated)
-
+                        new_detected = self.newly_detected(devices_mydict,devices_mydict_updated)
+                        
                         # Check for disappeared devices: NON-DETECTED case
                         self.check_disappearance(devices_mydict,devices_mydict_updated)
+
+                        if devices_mydict_updated == {}:
+                            print('No devices seen. Scan again')
+                            print('-----')
+                            break
+                        else:
+                            pass
 
                         # Update
                         devices_mydict = devices_mydict_updated
@@ -171,7 +179,7 @@ class DATA:
 
                 totalscan_time1 -= 1
             
-        except (KeyboardInterrupt,SystemExit):
+        except (SystemExit):
             print('Scanning Completed. Goodbye!')
             
         except Exception as e:
