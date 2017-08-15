@@ -1,6 +1,6 @@
-# BLE SCANNER AND DATA GENERATOR USING RASPBERRY PI
+# BLE SCANNER AND DATA GENERATOR USING RASPBERRY PI3
 
-Code is run on Python V2.x and Raspberry Pi Bluetoothctl environment
+Code is run on Python V2.x and Raspberry Pi3 Bluetoothctl environment
 
 To run any of the code, type: "sudo python CODENAME.py" in terminal
 
