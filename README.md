@@ -13,5 +13,8 @@ To run any of the code, type: "sudo python CODENAME.py" in terminal
    Stores the present date, time and mac and presence string upon scan real-time. It dynamically retrieves the BLE device every call,
    hence detects whether a new BLE device is present, or if a pre-existing device disappears.
    
+Note: From experiment it seems the maximum presence detection is within 15-20 [meters]. Enough to detect
+      any BLE device in a single room.
+   
    
    
